@@ -33,14 +33,14 @@ public class ConnectionProvider implements MultiTenantConnectionProvider, Hibern
 	}
 
 	@Override
-	public Connection getConnection(Object tenantIdentifier) throws SQLException {
+	public Connection getConnection(String tenantIdentifier) throws SQLException {
 		final Connection connection = dataSource.getConnection();
 		connection.setSchema((String) tenantIdentifier);
 		return connection;
 	}
 
 	@Override
-	public void releaseConnection(Object tenantIdentifier, Connection connection) throws SQLException {
+	public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {
     	connection.setSchema(tenantDataProperties.defaultSchema());
 		connection.close();
   	}
@@ -50,8 +50,9 @@ public class ConnectionProvider implements MultiTenantConnectionProvider, Hibern
 		return true;
 	}
 
+
 	@Override
-	public boolean isUnwrappableAs(Class<?> unwrapType) {
+	public boolean isUnwrappableAs(Class aClass) {
 		return false;
 	}
 

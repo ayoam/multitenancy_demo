@@ -1,10 +1,9 @@
 package com.example.multitenancydemo.multitenancy.service;
 
-import com.example.multitenancydemo.multitenancy.context.TenantContext;
 import com.example.multitenancydemo.multitenancy.data.flyway.TenantFlywayMigrationInitializer;
 import com.example.multitenancydemo.multitenancy.model.Tenant;
 import com.example.multitenancydemo.multitenancy.repository.TenantRepository;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

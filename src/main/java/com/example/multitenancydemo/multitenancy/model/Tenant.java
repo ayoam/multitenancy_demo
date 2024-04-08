@@ -1,11 +1,10 @@
 package com.example.multitenancydemo.multitenancy.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -15,9 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Tenant {
     @Id
-    @GeneratedValue(strategy=GenerationType.UUID)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "tenant_id")
-    private UUID tenantId;
+    private Long tenantId;
     @Column(name = "schema_name")
     private String schemaName;
 }

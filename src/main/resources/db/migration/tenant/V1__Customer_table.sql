@@ -1,5 +1,5 @@
 CREATE TABLE customer (
-  id      UUID PRIMARY KEY,
+  id      BIGINT PRIMARY KEY,
   name    VARCHAR(255),
   type    VARCHAR(255)
 );

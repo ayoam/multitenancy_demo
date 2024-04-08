@@ -1,7 +1,7 @@
 package com.example.multitenancydemo.multitenancy.resolver;
 
 import com.example.multitenancydemo.multitenancy.config.TenantHttpProperties;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
