@@ -4,6 +4,7 @@ import com.example.multitenancydemo.multitenancy.context.TenantContext;
 import com.example.multitenancydemo.multitenancy.data.flyway.TenantFlywayMigrationInitializer;
 import com.example.multitenancydemo.multitenancy.model.Tenant;
 import com.example.multitenancydemo.multitenancy.repository.TenantRepository;
+import com.example.multitenancydemo.multitenancy.wrapper.KeycloakWrapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public
 class TenantService {
     private final TenantFlywayMigrationInitializer flywayBuilder;
     private final TenantRepository tenantRepository;
+    private final KeycloakWrapper keycloakWrapper;
 
     @Transactional
     public Tenant createNewTenant(String schemaName) {
@@ -27,6 +29,9 @@ class TenantService {
         if(isTenantExist(schemaName)) {
             throw new RuntimeException("Schema Name already used");
         }
+        // Create tenant realm
+        keycloakWrapper.createRealm(schemaName);
+
         //build schema
         flywayBuilder.buildDatabaseSchema(schemaName);
 

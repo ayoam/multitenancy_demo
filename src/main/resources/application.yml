@@ -44,3 +44,11 @@ multitenancy:
     default-schema: default
 
 
+keycloak:
+  auth-server-url: http://${KEYCLOAK_HOST_URL:localhost}:${KEYCLOAK_PORT:9999}/
+
+keycloak-admin-cli: admin-cli
+keycloak-realm-creator-username: realm-creator
+keycloak-realm-creator-password: verysp2
+
+
