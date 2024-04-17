@@ -5,14 +5,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManagerResolver;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration(proxyBeanMethods = false)
-public class SecurityConfig {
+@EnableMethodSecurity(prePostEnabled = true)
+public class SecurityConfig{
     @Bean
-    SecurityFilterChain securityFilterChain(
+    SecurityFilterChain securityFilterChain (
             HttpSecurity http,
             AuthenticationManagerResolver<HttpServletRequest> authenticationManagerResolver,
             TenantContextFilter tenantContextFilter
@@ -24,4 +26,5 @@ public class SecurityConfig {
                 .addFilterBefore(tenantContextFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
+
 }

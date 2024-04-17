@@ -15,9 +15,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Tenant {
     @Id
-    @GeneratedValue(strategy=GenerationType.UUID)
     @Column(name = "tenant_id")
-    private UUID tenantId;
-    @Column(name = "schema_name")
-    private String schemaName;
+    private String tenantId;
 }

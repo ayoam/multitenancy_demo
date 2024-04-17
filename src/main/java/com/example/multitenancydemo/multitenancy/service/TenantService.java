@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,26 +22,27 @@ class TenantService {
     private final KeycloakWrapper keycloakWrapper;
 
     @Transactional
-    public Tenant createNewTenant(String schemaName) {
-        Tenant tenant = new Tenant();
-        tenant.setSchemaName(schemaName);
+    public Tenant createNewTenant(String tenantId) {
+        Tenant tenant = new Tenant(tenantId);
 
         //check if schema already exist
-        if(isTenantExist(schemaName)) {
-            throw new RuntimeException("Schema Name already used");
+        if(isTenantExist(tenantId)) {
+            throw new RuntimeException("TenantId already used");
         }
-        // Create tenant realm
-        keycloakWrapper.createRealm(schemaName);
+
+        // Create tenant realm and default user
+        keycloakWrapper.createRealm(tenantId);
+        keycloakWrapper.createUser(tenantId,"default-user","default-user", "ROLE_ADMIN");
 
         //build schema
-        flywayBuilder.buildDatabaseSchema(schemaName);
+        flywayBuilder.buildDatabaseSchema(tenantId);
 
         //save tenant
         return tenantRepository.save(tenant);
     }
 
     public boolean isTenantExist(String identifier) {
-        return tenantRepository.existsBySchemaNameIgnoreCase(identifier);
+        return tenantRepository.existsByTenantIdIgnoreCase(identifier);
     }
     private void buildDatabaseSchema(String schema) {
         flywayBuilder.tenantFlyway(schema).migrate();

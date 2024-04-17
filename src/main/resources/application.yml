@@ -24,6 +24,8 @@ spring:
 logging:
   pattern:
     correlation: "%clr(tenantId=%X{tenantId:-}){faint} "
+  level:
+    org.springframework.security: DEBUG
 
 management:
   endpoints:
@@ -42,7 +44,6 @@ multitenancy:
     header-name: X-TenantId
   data:
     default-schema: default
-
 
 keycloak:
   auth-server-url: http://${KEYCLOAK_HOST_URL:localhost}:${KEYCLOAK_PORT:9999}/
