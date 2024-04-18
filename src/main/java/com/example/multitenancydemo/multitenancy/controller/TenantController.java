@@ -18,6 +18,6 @@ public class TenantController {
     private TenantService tenantService;
     @PostMapping
     public ResponseEntity<Tenant> createTenant(@RequestBody CreateTenantDto dto) {
-        return new ResponseEntity<>(tenantService.createNewTenant(dto.getSchemaName()),HttpStatus.CREATED);
+        return new ResponseEntity<>(tenantService.createNewTenant(dto.getTenantId()),HttpStatus.CREATED);
     }
 }

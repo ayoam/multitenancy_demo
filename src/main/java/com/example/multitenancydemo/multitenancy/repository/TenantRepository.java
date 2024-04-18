@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface TenantRepository extends JpaRepository<Tenant, String> {
-    Boolean existsBySchemaNameIgnoreCase(String schemaName);
-    Boolean findBySchemaNameIgnoreCase(String schemaName);
+    Boolean existsByTenantIdIgnoreCase(String tenantId);
 }

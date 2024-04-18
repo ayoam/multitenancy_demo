@@ -2,21 +2,20 @@ package com.example.multitenancydemo.multitenancy.web;
 
 import com.example.multitenancydemo.multitenancy.context.TenantContext;
 import com.example.multitenancydemo.multitenancy.resolver.HttpHeaderTenantResolver;
-import java.io.IOException;
-
 import com.example.multitenancydemo.multitenancy.service.TenantService;
+import io.micrometer.common.KeyValue;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import io.micrometer.common.KeyValue;
-
 import org.slf4j.MDC;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.filter.ServerHttpObservationFilter;
+
+import java.io.IOException;
 
 @Component
 public class TenantContextFilter extends OncePerRequestFilter {
@@ -33,15 +32,17 @@ public class TenantContextFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tenantIdentifier = httpRequestTenantResolver.resolveTenantId(request);
         System.out.println(tenantIdentifier);
-        if (StringUtils.hasText(tenantIdentifier) && isTenantValid(tenantIdentifier)) {
-            TenantContext.setTenantId(tenantIdentifier);
-            configureLogs(tenantIdentifier);
-            configureTraces(tenantIdentifier, request);
-        } else {
-            throw new RuntimeException("A valid tenant must be specified for requests to %s".formatted(request.getRequestURI()));
+        // Disable tenant verification on tenant creation
+        if (!(request.getMethod().equals(HttpMethod.POST.toString()) && request.getRequestURI().contains("/tenants"))) {
+            if (StringUtils.hasText(tenantIdentifier) && isTenantValid(tenantIdentifier)) {
+                TenantContext.setTenantId(tenantIdentifier);
+                configureLogs(tenantIdentifier);
+                configureTraces(tenantIdentifier, request);
+            } else {
+                throw new RuntimeException("A valid tenant must be specified for requests to %s".formatted(request.getRequestURI()));
 //            throw new TenantResolutionException("A valid tenant must be specified for requests to %s".formatted(request.getRequestURI()));
+            }
         }
-
         try {
             filterChain.doFilter(request, response);
         } finally {

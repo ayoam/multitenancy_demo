@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateTenantDto {
-    private String schemaName;
+    private String tenantId;
 }
